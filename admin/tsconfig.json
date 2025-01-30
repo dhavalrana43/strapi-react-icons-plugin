@@ -2,9 +2,7 @@
   "extends": "@strapi/typescript-utils/tsconfigs/admin",
   "include": ["./src", "./custom.d.ts"],
   "compilerOptions": {
-    "outDir": "../../dist/admin",
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true
+    "rootDir": "../",
+    "baseUrl": "."
   }
 }

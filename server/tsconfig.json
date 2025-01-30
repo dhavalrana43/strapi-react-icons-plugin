@@ -2,9 +2,7 @@
   "extends": "@strapi/typescript-utils/tsconfigs/server",
   "include": ["./src"],
   "compilerOptions": {
-    "outDir": "../../dist/server",
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true
+    "rootDir": "../",
+    "baseUrl": "."
   }
 }
