@@ -22,7 +22,7 @@ import { useFetchClient } from '@strapi/strapi/admin';
 import { IconLibraryComponent } from './IconLibraryComponent';
 import { IconComponent } from './IconComponent';
 import { Minus, Plus } from '@strapi/icons';
-import { getTranslation } from 'src/utils/getTranslation';
+import { getTranslation } from '../../utils/getTranslation';
 
 interface IReactIconsSelector {
   description: null | MessageDescriptor;
