@@ -1,0 +1,80 @@
+{
+  "version": "0.0.0",
+  "keywords": [],
+  "type": "commonjs",
+  "exports": {
+    "./package.json": "./package.json",
+    "./strapi-admin": {
+      "types": "./dist/admin/src/index.d.ts",
+      "source": "./admin/src/index.ts",
+      "import": "./dist/admin/index.mjs",
+      "require": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js"
+    },
+    "./strapi-server": {
+      "types": "./dist/server/src/index.d.ts",
+      "source": "./server/src/index.ts",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build",
+    "watch": "strapi-plugin watch",
+    "watch:link": "strapi-plugin watch:link",
+    "verify": "strapi-plugin verify",
+    "test:ts:front": "run -T tsc -p admin/tsconfig.json",
+    "test:ts:back": "run -T tsc -p server/tsconfig.json"
+  },
+  "dependencies": {
+    "@loadable/component": "^5.16.4",
+    "@strapi/design-system": "^2.0.0-rc.14",
+    "@strapi/icons": "^2.0.0-rc.14",
+    "react-icons": "^5.4.0",
+    "react-intl": "^7.1.5"
+  },
+  "devDependencies": {
+    "@strapi/sdk-plugin": "^5.3.0",
+    "@strapi/strapi": "^5.9.0",
+    "@strapi/typescript-utils": "^5.9.0",
+    "@types/loadable__component": "^5.13.9",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "prettier": "^3.4.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.2",
+    "styled-components": "^6.1.14",
+    "typescript": "^5.7.3"
+  },
+  "peerDependencies": {
+    "@strapi/sdk-plugin": "^5.3.0",
+    "@strapi/strapi": "^5.9.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.2",
+    "styled-components": "^6.1.14"
+  },
+  "strapi": {
+    "kind": "plugin",
+    "name": "strapi-react-icons-plugin",
+    "displayName": "React Icons",
+    "description": "A custom field plugin for Strapi that allows you to select icons from the React Icons library."
+  },
+  "name": "strapi-react-icons-plugin",
+  "description": "A custom field plugin for Strapi that allows you to select icons from the React Icons library.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dhavalrana43/strapi-react-icons-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dhavalrana43/strapi-react-icons-plugin/issues"
+  },
+  "homepage": "https://github.com/dhavalrana43/strapi-react-icons-plugin#readme",
+  "author": "Dhaval Rana <drana@plusonex.com>"
+}
