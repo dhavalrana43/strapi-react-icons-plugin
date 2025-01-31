@@ -44,10 +44,12 @@ const HomePage = () => {
   };
 
   const importDefaultIconLibraries = async () => {
-    (await import('../data/default.json')).default.forEach(async (entry) => {
-      await post('/react-icons/iconlibrary/post', { data: entry });
-    });
-    getIconLibraries();
+    try {
+      await post('/react-icons/iconlibrary/post');
+      getIconLibraries();
+    } catch (e) {
+      console.log('error', e);
+    }
   };
 
   useEffect(() => {

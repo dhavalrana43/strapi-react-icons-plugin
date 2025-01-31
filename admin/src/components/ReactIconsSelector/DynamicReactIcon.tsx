@@ -41,9 +41,14 @@ const iconComponents = {
 
 export interface IDynamicReactIcon extends DOMAttributes<SVGElement> {
   name: IReactIcon;
+  size?: number;
 }
 
-const DynamicReactIcon: React.FC<IDynamicReactIcon> = ({ name, ...rest }: IDynamicReactIcon) => {
+const DynamicReactIcon: React.FC<IDynamicReactIcon> = ({
+  name,
+  size,
+  ...rest
+}: IDynamicReactIcon) => {
   const lib = name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').split(' ')[0];
   const iconComponent = iconComponents[lib];
 
@@ -53,7 +58,7 @@ const DynamicReactIcon: React.FC<IDynamicReactIcon> = ({ name, ...rest }: IDynam
     resolveComponent: (el) => el[name],
   }) as IconType;
 
-  return <DynamicIcon {...rest} />;
+  return <DynamicIcon {...rest} size={size} />;
 };
 
 export default DynamicReactIcon;

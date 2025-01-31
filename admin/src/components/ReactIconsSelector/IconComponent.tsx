@@ -1,6 +1,7 @@
 import React from 'react';
 import { IconContext } from 'react-icons/lib';
-import * as ReactIcons from '../../all';
+
+import DynamicReactIcon from './DynamicReactIcon';
 
 interface IIconComponent {
   icon: string;
@@ -10,13 +11,11 @@ interface IIconComponent {
 const strapiTheme = window.localStorage.STRAPI_THEME;
 
 export const IconComponent: React.FC<IIconComponent> = ({ icon, size }) => {
-  const DynamicIconComponent = ReactIcons[icon as keyof typeof ReactIcons];
-
-  if (undefined === DynamicIconComponent) return <></>;
+  if (undefined === icon) return <></>;
 
   return (
     <IconContext.Provider value={{ color: strapiTheme === 'light' ? '#212134' : '#a5a5ba' }}>
-      <DynamicIconComponent size={size} />
+      <DynamicReactIcon name={icon} size={size} />
     </IconContext.Provider>
   );
 };

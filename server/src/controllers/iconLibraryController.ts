@@ -7,8 +7,8 @@ const iconLibraryController = ({ strapi }: { strapi: Core.Strapi }) => {
     async find(ctx) {
       try {
         ctx.body = await getService().find(ctx.query);
-      } catch (error) {
-        ctx.throw(500, error);
+      } catch (error: any) {
+        ctx.throw(500, error.message);
       }
     },
 
@@ -16,8 +16,8 @@ const iconLibraryController = ({ strapi }: { strapi: Core.Strapi }) => {
       try {
         await getService().create(ctx.request.body);
         ctx.body = await getService().find();
-      } catch (error) {
-        ctx.throw(500, error);
+      } catch (error: any) {
+        ctx.throw(500, error.message);
       }
     },
 
@@ -25,16 +25,16 @@ const iconLibraryController = ({ strapi }: { strapi: Core.Strapi }) => {
       try {
         await getService().update(ctx.params.id, ctx.request.body);
         ctx.body = await getService().find();
-      } catch (error) {
-        ctx.throw(500, error);
+      } catch (error: any) {
+        ctx.throw(500, error.message);
       }
     },
 
     async delete(ctx) {
       try {
         ctx.body = await getService().delete(ctx.params.id);
-      } catch (error) {
-        ctx.throw(500, error);
+      } catch (error: any) {
+        ctx.throw(500, error.message);
       }
     },
   };
