@@ -3,6 +3,8 @@
   "include": ["./src", "./custom.d.ts"],
   "compilerOptions": {
     "rootDir": "../",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "target": "ESNext",
+    "strict": true
   }
 }
