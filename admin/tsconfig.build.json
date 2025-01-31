@@ -5,8 +5,11 @@
   "compilerOptions": {
     "rootDir": "../",
     "baseUrl": ".",
-    "outDir": "./dist",
+    "outDir": "./dist/admin",
     "declaration": true,
-    "declarationDir": "./dist"
+    "declarationDir": "./dist/admin",
+    "emitDeclarationOnly": true,
+    "composite": true,
+    "tsBuildInfoFile": "./dist/admin/tsconfig.tsbuildinfo"
   }
 }
