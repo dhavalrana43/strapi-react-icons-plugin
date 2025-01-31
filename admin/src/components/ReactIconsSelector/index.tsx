@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import {
   Box,
-  Button,
-  Field,
-  Flex,
-  Modal,
-  Searchbar,
-  Select,
   TextInput,
+  Field,
+  Modal,
   Typography,
   Grid,
+  Searchbar,
+  Button,
   Accordion,
+  Flex,
+  SingleSelect,
 } from '@strapi/design-system';
 
 import * as ReactIcons from '../../all';
@@ -169,14 +169,16 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
           </Modal.Body>
           <Modal.Footer>
             <Flex justifyContent="space-between">
-              <Select value={selectedIconLibrary} onChange={setSelectedIconLibrary}>
-                <Select.Option value="">All icon libraries</Select.Option>
+              <SingleSelect
+                value={selectedIconLibrary}
+                onChange={(value: any) => setSelectedIconLibrary(value)}
+              >
                 {iconLibraries.map((iconLibrary) => (
-                  <Select.Option key={iconLibrary.id} value={iconLibrary.abbreviation}>
-                    {iconLibrary.name}
-                  </Select.Option>
+                  <SingleSelect.Option key={iconLibrary.id} value={iconLibrary.id}>
+                    {`${iconLibrary.name} (${iconLibrary.abbreviation})`}
+                  </SingleSelect.Option>
                 ))}
-              </Select>
+              </SingleSelect>
               <Button variant="tertiary" onClick={toggleModal}>
                 Close
               </Button>

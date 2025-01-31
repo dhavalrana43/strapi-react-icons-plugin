@@ -10,8 +10,6 @@ import {
   Flex,
   Typography,
   VisuallyHidden,
-  Page,
-  EmptyStateLayout,
 } from '@strapi/design-system';
 import { Trash } from '@strapi/icons';
 import { Navigate } from 'react-router-dom';
@@ -19,6 +17,13 @@ import { useIntl } from 'react-intl';
 import * as ReactIcons from '../all';
 import { getTranslation } from '../utils/getTranslation';
 import usePermissions from '../hooks/usePermissions';
+
+interface IIconLibrary {
+  id: string;
+  name: string;
+  abbreviation: string;
+  isEnabled: boolean;
+}
 
 const HomePage = () => {
   const { formatMessage } = useIntl();
@@ -113,142 +118,145 @@ const HomePage = () => {
 
   return (
     <Main>
-      <Page.Root padding={6} marginTop={2}>
-        <Page.Header
-          title={formatMessage({ id: getTranslation('plugin.name') })}
-          subtitle={formatMessage({ id: getTranslation('home.subtitle') })}
-          primaryAction={
-            !isDefaultImported && (
-              <Button onClick={importDefaultIconLibraries}>
-                {formatMessage({ id: getTranslation('home.import_default') })}
-              </Button>
-            )
-          }
-        />
-
-        <Page.Actions>
-          <Flex gap={2}>
-            <Button
-              onClick={() =>
-                iconLibraries
-                  .filter((lib) => lib.isEnabled)
-                  .forEach((lib) => updateIconLibrary(lib.id, false))
-              }
-              disabled={iconLibraries.length === 0}
-              variant="secondary"
-              startIcon={<Trash />}
-            >
-              {formatMessage({ id: getTranslation('home.disable_all') })}
+      {/* Header Section */}
+      <Box padding={6} marginTop={2}>
+        <Box marginBottom={4}>
+          <Typography variant="alpha">
+            {formatMessage({ id: getTranslation('plugin.name') })}
+          </Typography>
+          <Typography variant="epsilon" textColor="neutral600">
+            {formatMessage({ id: getTranslation('home.subtitle') })}
+          </Typography>
+        </Box>
+        {!isDefaultImported && (
+          <Box marginBottom={4}>
+            <Button onClick={importDefaultIconLibraries}>
+              {formatMessage({ id: getTranslation('home.import_default') })}
             </Button>
-            <Button
-              onClick={() => iconLibraries.forEach((lib) => deleteIconLibrary(lib.id))}
-              disabled={iconLibraries.length === 0}
-              variant="danger"
-              startIcon={<Trash />}
-            >
-              {formatMessage({ id: getTranslation('home.delete_all') })}
-            </Button>
-          </Flex>
-        </Page.Actions>
+          </Box>
+        )}
+        <Flex gap={2} marginBottom={4}>
+          <Button
+            onClick={() =>
+              iconLibraries
+                .filter((lib) => lib.isEnabled)
+                .forEach((lib) => updateIconLibrary(lib.id, false))
+            }
+            disabled={iconLibraries.length === 0}
+            variant="secondary"
+            startIcon={<Trash />}
+          >
+            {formatMessage({ id: getTranslation('home.disable_all') })}
+          </Button>
+          <Button
+            onClick={() => iconLibraries.forEach((lib) => deleteIconLibrary(lib.id))}
+            disabled={iconLibraries.length === 0}
+            variant="danger"
+            startIcon={<Trash />}
+          >
+            {formatMessage({ id: getTranslation('home.delete_all') })}
+          </Button>
+        </Flex>
+      </Box>
 
-        <Page.Content>
-          {loadingData ? (
-            <Box padding={4}>
-              <Typography variant="pi">
-                {formatMessage({
-                  id: getTranslation('home.loading_libraries'),
-                  defaultMessage: 'Loading icon libraries...',
-                })}
-              </Typography>
-            </Box>
-          ) : iconLibraries.length > 0 ? (
-            <Table.Root colCount={5}>
-              <Table.Head>
-                <Table.Row>
-                  <Table.HeaderCell>
-                    <Typography variant="sigma">
-                      {formatMessage({ id: getTranslation('home.enabled') })}
-                    </Typography>
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    <Typography variant="sigma">
-                      {formatMessage({ id: getTranslation('home.abbreviation') })}
-                    </Typography>
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    <Typography variant="sigma">
-                      {formatMessage({ id: getTranslation('home.name') })}
-                    </Typography>
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    <Typography variant="sigma">
-                      {formatMessage({ id: getTranslation('home.icon_count') })}
-                    </Typography>
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    <VisuallyHidden>
-                      {formatMessage({ id: getTranslation('home.actions') })}
-                    </VisuallyHidden>
-                  </Table.HeaderCell>
+      {/* Content Section */}
+      <Box padding={6}>
+        {loadingData ? (
+          <Box padding={4}>
+            <Typography variant="pi">
+              {formatMessage({
+                id: getTranslation('home.loading_libraries'),
+                defaultMessage: 'Loading icon libraries...',
+              })}
+            </Typography>
+          </Box>
+        ) : iconLibraries.length > 0 ? (
+          <Table.Root colCount={5}>
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell>
+                  <Typography variant="sigma">
+                    {formatMessage({ id: getTranslation('home.enabled') })}
+                  </Typography>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Typography variant="sigma">
+                    {formatMessage({ id: getTranslation('home.abbreviation') })}
+                  </Typography>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Typography variant="sigma">
+                    {formatMessage({ id: getTranslation('home.name') })}
+                  </Typography>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Typography variant="sigma">
+                    {formatMessage({ id: getTranslation('home.icon_count') })}
+                  </Typography>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <VisuallyHidden>
+                    {formatMessage({ id: getTranslation('home.actions') })}
+                  </VisuallyHidden>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Head>
+            <Table.Body>
+              {iconLibraries.map((iconLibrary) => (
+                <Table.Row key={iconLibrary.id}>
+                  <Table.Cell>
+                    <Checkbox
+                      aria-label={formatMessage(
+                        { id: getTranslation('home.toggle_library') },
+                        { name: iconLibrary.name }
+                      )}
+                      checked={iconLibrary.isEnabled}
+                      onChange={() => updateIconLibrary(iconLibrary.id, !iconLibrary.isEnabled)}
+                    />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Typography>{iconLibrary.abbreviation}</Typography>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Typography>{iconLibrary.name}</Typography>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Typography>{iconCounts[iconLibrary.abbreviation]}</Typography>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <IconButton
+                      onClick={() => deleteIconLibrary(iconLibrary.id)}
+                      icon={<Trash />}
+                      aria-label={formatMessage(
+                        { id: getTranslation('home.delete_library') },
+                        { name: iconLibrary.name }
+                      )}
+                    />
+                  </Table.Cell>
                 </Table.Row>
-              </Table.Head>
-
-              <Table.Body>
-                {iconLibraries.map((iconLibrary) => (
-                  <Table.Row key={iconLibrary.id}>
-                    <Table.Cell>
-                      <Checkbox
-                        aria-label={formatMessage(
-                          { id: getTranslation('home.toggle_library') },
-                          { name: iconLibrary.name }
-                        )}
-                        checked={iconLibrary.isEnabled}
-                        onChange={() => updateIconLibrary(iconLibrary.id, !iconLibrary.isEnabled)}
-                      />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Typography>{iconLibrary.abbreviation}</Typography>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Typography>{iconLibrary.name}</Typography>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Typography>{iconCounts[iconLibrary.abbreviation]}</Typography>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <IconButton
-                        onClick={() => deleteIconLibrary(iconLibrary.id)}
-                        icon={<Trash />}
-                        aria-label={formatMessage(
-                          { id: getTranslation('home.delete_library') },
-                          { name: iconLibrary.name }
-                        )}
-                      />
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table.Root>
-          ) : (
-            <EmptyStateLayout
-              icon={<ReactIcons.TbMoodEmpty />}
-              content={formatMessage({ id: getTranslation('home.no_libraries') })}
-              action={
-                !isDefaultImported ? (
-                  <Button onClick={importDefaultIconLibraries}>
-                    {formatMessage({ id: getTranslation('home.import_default') })}
-                  </Button>
-                ) : undefined
-              }
-            />
-          )}
-          {importError && (
-            <Box padding={4}>
-              <Typography variant="danger">{importError}</Typography>
-            </Box>
-          )}
-        </Page.Content>
-      </Page.Root>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        ) : (
+          <Box padding={4}>
+            <Typography variant="omega" textColor="neutral600">
+              {formatMessage({ id: getTranslation('home.no_libraries') })}
+            </Typography>
+            {!isDefaultImported && (
+              <Box marginTop={2}>
+                <Button onClick={importDefaultIconLibraries}>
+                  {formatMessage({ id: getTranslation('home.import_default') })}
+                </Button>
+              </Box>
+            )}
+          </Box>
+        )}
+        {importError && (
+          <Box padding={4}>
+            <Typography variant="danger">{importError}</Typography>
+          </Box>
+        )}
+      </Box>
     </Main>
   );
 };

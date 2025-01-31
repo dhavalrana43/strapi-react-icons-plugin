@@ -1,5 +1,3 @@
-import { DiReact } from 'react-icons/di';
-
-const PluginIcon = () => <DiReact />;
-
-export default PluginIcon;
+import { PuzzlePiece } from '@strapi/icons';
+const PluginIcon = () => <PuzzlePiece />;
+export { PluginIcon };

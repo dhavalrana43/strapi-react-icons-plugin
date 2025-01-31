@@ -3,7 +3,7 @@ import { PLUGIN_ID } from './pluginId';
 import { Initializer } from './components/Initializer';
 
 import pluginPkg from '../../package.json';
-import PluginIcon from './components/PluginIcon';
+import { PluginIcon } from './components/PluginIcon';
 
 type TradOptions = Record<string, string>;
 
