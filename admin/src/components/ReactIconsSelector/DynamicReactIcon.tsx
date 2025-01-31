@@ -1,45 +1,10 @@
-'use client';
-
 import { DOMAttributes } from 'react';
+import { IconType } from 'react-icons';
+import * as React from 'react';
 
 export type IReactIcon = string;
 
-import loadable from '@loadable/component';
-
-import { IconType } from 'react-icons';
-
-const iconComponents = {
-  Ai: () => import('react-icons/ai'),
-  Bs: () => import('react-icons/bs'),
-  Bi: () => import('react-icons/bi'),
-  Ci: () => import('react-icons/ci'),
-  Di: () => import('react-icons/di'),
-  Fi: () => import('react-icons/fi'),
-  Fc: () => import('react-icons/fc'),
-  Fa: () => import('react-icons/fa6'),
-  Gi: () => import('react-icons/gi'),
-  Go: () => import('react-icons/go'),
-  Gr: () => import('react-icons/gr'),
-  Hi: () => import('react-icons/hi2'),
-  Im: () => import('react-icons/im'),
-  Lia: () => import('react-icons/lia'),
-  Io: () => import('react-icons/io5'),
-  Lu: () => import('react-icons/lu'),
-  Md: () => import('react-icons/md'),
-  Pi: () => import('react-icons/pi'),
-  Rx: () => import('react-icons/rx'),
-  Ri: () => import('react-icons/ri'),
-  Si: () => import('react-icons/si'),
-  Sl: () => import('react-icons/sl'),
-  Tb: () => import('react-icons/tb'),
-  Tfi: () => import('react-icons/tfi'),
-  Ti: () => import('react-icons/ti'),
-  Vsc: () => import('react-icons/vsc'),
-  Wi: () => import('react-icons/wi'),
-  Cg: () => import('react-icons/cg'),
-} as unknown as { [x: string]: () => Promise<{ [key: string]: IconType }> };
-
-export interface IDynamicReactIcon extends DOMAttributes<SVGElement> {
+interface IDynamicReactIcon extends DOMAttributes<SVGElement> {
   name: IReactIcon;
   size?: number;
 }
@@ -49,16 +14,32 @@ const DynamicReactIcon: React.FC<IDynamicReactIcon> = ({
   size,
   ...rest
 }: IDynamicReactIcon) => {
-  const lib = name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').split(' ')[0];
-  const iconComponent = iconComponents[lib];
+  const [icon, setIcon] = React.useState<IconType | null>(null);
+  const [error, setError] = React.useState<Error | null>(null);
 
-  if (!iconComponent) return <></>;
+  React.useEffect(() => {
+    const loadIcon = async () => {
+      try {
+        const lib = name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').split(' ')[0];
+        const iconModule = await import(`react-icons/${lib.toLowerCase()}`);
+        const IconComponent = iconModule[name] as IconType;
+        setIcon(() => IconComponent);
+        setError(null);
+      } catch (e) {
+        setError(new Error(`Icon ${name} not found`));
+        setIcon(null);
+      }
+    };
+    loadIcon();
+  }, [name]);
 
-  const DynamicIcon = loadable(iconComponent, {
-    resolveComponent: (el) => el[name],
-  }) as IconType;
+  if (error) {
+    console.error(error);
+    return null; // or a placeholder
+  }
+  if (!icon) return null;
 
-  return <DynamicIcon {...rest} size={size} />;
+  return <>{React.createElement(icon, { ...rest, size })}</>;
 };
 
 export default DynamicReactIcon;

@@ -1,15 +1,17 @@
 {
   "extends": "./tsconfig",
-  "include": ["./src", "./custom.d.ts"],
+  "include": ["./src", "../custom.d.ts", "./src/all.ts"],
   "exclude": ["**/*.test.ts", "**/*.test.tsx"],
   "compilerOptions": {
     "rootDir": "../",
     "baseUrl": ".",
     "outDir": "./dist/admin",
     "declaration": true,
-    "declarationDir": "./dist/admin",
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
     "composite": true,
-    "tsBuildInfoFile": "./dist/admin/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/admin/tsconfig.tsbuildinfo",
+    "module": "commonjs",
+    "target": "esnext",
+    "jsx": "react-jsx"
   }
 }

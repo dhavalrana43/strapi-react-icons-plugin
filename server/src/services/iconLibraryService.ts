@@ -7,8 +7,8 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
         'plugin::strapi-react-icons-plugin.iconlibrary',
         query
       );
-    } catch (e) {
-      strapi.log.error(`Failed to find icon libraries ${e}`);
+    } catch (e: any) {
+      strapi.log.error(`Failed to find icon libraries ${e.message}`);
       throw new Error(`Failed to find icon libraries`);
     }
   },
@@ -17,8 +17,8 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
       return await strapi.entityService.create('plugin::strapi-react-icons-plugin.iconlibrary', {
         data,
       });
-    } catch (e) {
-      strapi.log.error(`Failed to create icon library ${e}`);
+    } catch (e: any) {
+      strapi.log.error(`Failed to create icon library ${e.message}`);
       throw new Error(`Failed to create icon library`);
     }
   },
@@ -29,16 +29,16 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
         id,
         { data }
       );
-    } catch (e) {
-      strapi.log.error(`Failed to update icon library ${e}`);
+    } catch (e: any) {
+      strapi.log.error(`Failed to update icon library ${e.message}`);
       throw new Error(`Failed to update icon library`);
     }
   },
   async delete(id: string) {
     try {
       return await strapi.entityService.delete('plugin::strapi-react-icons-plugin.iconlibrary', id);
-    } catch (e) {
-      strapi.log.error(`Failed to delete icon library ${e}`);
+    } catch (e: any) {
+      strapi.log.error(`Failed to delete icon library ${e.message}`);
       throw new Error(`Failed to delete icon library`);
     }
   },

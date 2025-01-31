@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+// File: admin/src/components/ReactIconsSelector/index.tsx
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -16,6 +17,7 @@ import {
   Typography,
   Grid,
 } from '@strapi/design-system';
+// Updated import to reference the types correctly.
 import * as ReactIcons from '../../all';
 import { MessageDescriptor, useIntl } from 'react-intl';
 import { useFetchClient } from '@strapi/strapi/admin';
@@ -74,15 +76,18 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
 
   useEffect(() => {
     const getIconLibraries = async () => {
-      setIconLibraries(
-        (await get('/react-icons/iconlibrary/find')).data.filter(
-          (iconLibrary: IIconLibrary) => iconLibrary.isEnabled
-        )
-      );
+      try {
+        const response = await get('/react-icons/iconlibrary/find');
+        setIconLibraries(
+          response.data.filter((iconLibrary: IIconLibrary) => iconLibrary.isEnabled)
+        );
+      } catch (e) {
+        console.error('Failed to fetch icon libraries', e);
+      }
     };
 
     getIconLibraries();
-  }, []);
+  }, [get]);
 
   const [expandedIDs, setExpandedID] = useState<string[]>([]);
   const handleToggle = (id: string) => () => {
@@ -98,6 +103,10 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
       setExpandedID(iconLibraries.map((iconLibrary, index) => 'acc-' + index));
     }
   };
+
+  const filteredIcons = useMemo(() => {
+    return allReactIcons.filter((icon) => icon.toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [allReactIcons, searchTerm]);
 
   return (
     <>
@@ -131,7 +140,10 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
         <Modal.Root onClose={toggleModal} labelledBy="title">
           <Modal.Header>
             <Typography fontWeight="bold" id="title">
-              Select icon
+              {formatMessage({
+                id: getTranslation('react-icons.iconSelector.selectIcon'),
+                defaultMessage: 'Select icon',
+              })}
             </Typography>
           </Modal.Header>
           <Modal.Body>
@@ -146,6 +158,7 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
                     }
                     placeholder={formatMessage({
                       id: getTranslation('react-icons.iconSelector.search'),
+                      defaultMessage: 'Search icons...',
                     })}
                   />
                 </Grid.Col>
@@ -155,7 +168,15 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
                     onClick={handleExpand}
                     startIcon={expandedIDs.length === iconLibraries.length ? <Minus /> : <Plus />}
                   >
-                    {expandedIDs.length === iconLibraries.length ? 'Collapse' : 'Expand'}
+                    {expandedIDs.length === iconLibraries.length
+                      ? formatMessage({
+                          id: getTranslation('react-icons.iconSelector.collapse'),
+                          defaultMessage: 'Collapse',
+                        })
+                      : formatMessage({
+                          id: getTranslation('react-icons.iconSelector.expand'),
+                          defaultMessage: 'Expand',
+                        })}
                   </Button>
                 </Grid.Col>
               </Grid>
@@ -169,14 +190,12 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
                           !selectedIconLibrary || iconLibrary.abbreviation === selectedIconLibrary
                       )
                       .map((iconLibrary, index) => {
-                        const iconCount = allReactIcons.filter(
-                          (icon) =>
-                            icon.toLowerCase().startsWith(iconLibrary.abbreviation) &&
-                            icon.toLowerCase().includes(searchTerm.toLowerCase())
-                        ).length;
+                        const libraryIcons = filteredIcons.filter((icon) =>
+                          icon.toLowerCase().startsWith(iconLibrary.abbreviation)
+                        );
 
                         return (
-                          iconCount > 0 && (
+                          libraryIcons.length > 0 && (
                             <Accordion
                               key={iconLibrary.id}
                               value={`acc-${index}`}
@@ -189,17 +208,13 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
                                 title={
                                   <Typography>{`${iconLibrary.name} (${iconLibrary.abbreviation})`}</Typography>
                                 }
-                                action={<Badge>{iconCount}</Badge>}
+                                action={<Badge>{libraryIcons.length}</Badge>}
                               />
                               <AccordionContent>
                                 <Box paddingLeft={3} paddingTop={3} paddingBottom={3}>
                                   <Flex wrap="wrap" gap={1}>
                                     <IconLibraryComponent
-                                      icons={allReactIcons.filter(
-                                        (icon) =>
-                                          icon.toLowerCase().startsWith(iconLibrary.abbreviation) &&
-                                          icon.toLowerCase().includes(searchTerm.toLowerCase())
-                                      )}
+                                      icons={libraryIcons}
                                       onSelectIcon={onSelectIcon}
                                     />
                                   </Flex>
@@ -210,11 +225,33 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
                         );
                       })}
                   </AccordionGroup>
+                  {iconLibraries
+                    .filter(
+                      (iconLibrary) =>
+                        !selectedIconLibrary || iconLibrary.abbreviation === selectedIconLibrary
+                    )
+                    .every(
+                      (iconLibrary) =>
+                        filteredIcons.filter((icon) =>
+                          icon.toLowerCase().startsWith(iconLibrary.abbreviation)
+                        ).length === 0
+                    ) && (
+                    <Box padding={4}>
+                      <Typography variant="pi">
+                        {formatMessage({
+                          id: getTranslation('react-icons.iconSelector.noIconsAvailable'),
+                          defaultMessage: 'No icons available in this library.',
+                        })}
+                      </Typography>
+                    </Box>
+                  )}
                 </Box>
               ) : (
                 <Typography variant="pi">
                   {formatMessage({
                     id: getTranslation('react-icons.iconSelector.noIconLibrariesAvailable'),
+                    defaultMessage:
+                      'No icon libraries available. Please import them on the plugin page.',
                   })}
                 </Typography>
               )}
@@ -231,6 +268,7 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
                 <Select.Option value="">
                   {formatMessage({
                     id: getTranslation('react-icons.iconSelector.allIconLibraries'),
+                    defaultMessage: 'All icon libraries',
                   })}
                 </Select.Option>
                 {iconLibraries.map((iconLibrary) => (
@@ -240,7 +278,10 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
                 ))}
               </Select>
               <Button variant="tertiary" onClick={toggleModal}>
-                Close
+                {formatMessage({
+                  id: getTranslation('react-icons.iconSelector.close'),
+                  defaultMessage: 'Close',
+                })}
               </Button>
             </Flex>
           </Modal.Footer>

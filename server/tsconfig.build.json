@@ -7,9 +7,10 @@
     "baseUrl": ".",
     "outDir": "./dist/server",
     "declaration": true,
-    "declarationDir": "./dist/server",
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
     "composite": true,
-    "tsBuildInfoFile": "./dist/server/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/server/tsconfig.tsbuildinfo",
+    "module": "commonjs",
+    "target": "esnext"
   }
 }

@@ -8,7 +8,8 @@ const iconLibraryController = ({ strapi }: { strapi: Core.Strapi }) => {
       try {
         ctx.body = await getService().find(ctx.query);
       } catch (error: any) {
-        ctx.throw(500, error.message);
+        strapi.log.error(`Error finding icon libraries: ${error.message}`);
+        ctx.throw(500, 'Failed to fetch icon libraries');
       }
     },
 
@@ -17,7 +18,8 @@ const iconLibraryController = ({ strapi }: { strapi: Core.Strapi }) => {
         await getService().create(ctx.request.body);
         ctx.body = await getService().find();
       } catch (error: any) {
-        ctx.throw(500, error.message);
+        strapi.log.error(`Error creating icon library: ${error.message}`);
+        ctx.throw(500, 'Failed to create icon library');
       }
     },
 
@@ -26,7 +28,8 @@ const iconLibraryController = ({ strapi }: { strapi: Core.Strapi }) => {
         await getService().update(ctx.params.id, ctx.request.body);
         ctx.body = await getService().find();
       } catch (error: any) {
-        ctx.throw(500, error.message);
+        strapi.log.error(`Error updating icon library: ${error.message}`);
+        ctx.throw(500, 'Failed to update icon library');
       }
     },
 
@@ -34,7 +37,8 @@ const iconLibraryController = ({ strapi }: { strapi: Core.Strapi }) => {
       try {
         ctx.body = await getService().delete(ctx.params.id);
       } catch (error: any) {
-        ctx.throw(500, error.message);
+        strapi.log.error(`Error deleting icon library: ${error.message}`);
+        ctx.throw(500, 'Failed to delete icon library');
       }
     },
   };
