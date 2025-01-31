@@ -3,8 +3,6 @@
   "include": ["./src"],
   "compilerOptions": {
     "rootDir": "../",
-    "baseUrl": ".",
-    "moduleResolution": "node",
-    "esModuleInterop": true
+    "baseUrl": "."
   }
 }

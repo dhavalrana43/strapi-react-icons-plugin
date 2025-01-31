@@ -1,11 +1,5 @@
-// File: admin/src/components/ReactIconsSelector/index.tsx
 import React, { useEffect, useState, useMemo } from 'react';
 import {
-  Accordion,
-  AccordionContent,
-  AccordionGroup,
-  AccordionTrigger,
-  Badge,
   Box,
   Button,
   Field,
@@ -17,7 +11,13 @@ import {
   Typography,
   Grid,
 } from '@strapi/design-system';
-// Updated import to reference the types correctly.
+import {
+  Accordion,
+  AccordionContent,
+  AccordionGroup,
+  AccordionTrigger,
+  Badge,
+} from '@strapi/design-system/Accordion';
 import * as ReactIcons from '../../all';
 import { MessageDescriptor, useIntl } from 'react-intl';
 import { useFetchClient } from '@strapi/strapi/admin';
@@ -25,6 +25,7 @@ import { IconLibraryComponent } from './IconLibraryComponent';
 import { IconComponent } from './IconComponent';
 import { Minus, Plus } from '@strapi/icons';
 import { getTranslation } from '../../utils/getTranslation';
+import { TbSearch as SearchIcon, TbX as CloseIcon } from 'react-icons/tb';
 
 interface IReactIconsSelector {
   description: null | MessageDescriptor;
@@ -123,14 +124,20 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
         required={required}
         error={error}
         startAction={
-          <Field.Action onClick={toggleModal}>
-            {value ? <IconComponent icon={value} /> : <ReactIcons.TbSearch />}
+          <Field.Action
+            onClick={toggleModal}
+            label={formatMessage({
+              id: getTranslation('react-icons.iconSelector.selectIcon'),
+              defaultMessage: 'Select icon',
+            })}
+          >
+            {value ? <IconComponent icon={value} /> : <SearchIcon />}
           </Field.Action>
         }
         endAction={
           !!value && (
-            <Field.Action onClick={() => changeIcon('')}>
-              <ReactIcons.TbX />
+            <Field.Action onClick={() => changeIcon('')} label="Close">
+              <CloseIcon />
             </Field.Action>
           )
         }

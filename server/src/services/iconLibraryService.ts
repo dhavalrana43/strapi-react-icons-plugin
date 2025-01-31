@@ -14,12 +14,39 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
   },
   async create(data: any) {
     try {
+      if (Array.isArray(data)) {
+        const results = [];
+        for (const entry of data) {
+          const existing = await strapi.entityService.findMany(
+            'plugin::strapi-react-icons-plugin.iconlibrary',
+            { filters: { abbreviation: entry.abbreviation } }
+          );
+          if (existing.length === 0) {
+            results.push(
+              await strapi.entityService.create('plugin::strapi-react-icons-plugin.iconlibrary', {
+                data: entry,
+              })
+            );
+          }
+        }
+        return results;
+      }
+
+      const existing = await strapi.entityService.findMany(
+        'plugin::strapi-react-icons-plugin.iconlibrary',
+        { filters: { abbreviation: data.abbreviation } }
+      );
+
+      if (existing.length > 0) {
+        throw new Error('Library already exists');
+      }
+
       return await strapi.entityService.create('plugin::strapi-react-icons-plugin.iconlibrary', {
         data,
       });
     } catch (e: any) {
-      strapi.log.error(`Failed to create icon library ${e.message}`);
-      throw new Error(`Failed to create icon library`);
+      strapi.log.error(`Create failed: ${e.message}`);
+      throw e;
     }
   },
   async update(id: string, data: any) {

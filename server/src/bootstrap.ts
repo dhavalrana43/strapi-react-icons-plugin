@@ -5,32 +5,36 @@ const bootstrap = async ({ strapi }: { strapi: Core.Strapi }) => {
   const actions = [
     {
       section: 'plugins',
-      displayName: 'Access react-icons menu',
+      displayName: 'Access React Icons plugin',
       uid: 'read',
-      pluginName: 'react-icons',
+      pluginName: 'strapi-react-icons-plugin',
     },
   ];
 
-  await (strapi as any).admin?.services.permission.actionProvider.registerMany(actions);
+  await strapi.admin?.services.permission.actionProvider.registerMany(actions);
   const pluginStore = strapi.store({
-    environment: '',
     type: 'plugin',
     name: 'strapi-react-icons-plugin',
   });
-  const hasCreated = await pluginStore.get({ key: 'hasCreated' });
 
-  if (!hasCreated) {
+  if (!(await pluginStore.get({ key: 'hasCreated' }))) {
     try {
-      await Promise.all(
-        defaultData.map(async (entry) => {
-          await strapi.entityService.create('plugin::strapi-react-icons-plugin.iconlibrary', {
-            data: entry,
-          });
-        })
+      const existing = await strapi.entityService.findMany(
+        'plugin::strapi-react-icons-plugin.iconlibrary'
       );
+
+      if (existing.length === 0) {
+        await Promise.all(
+          defaultData.map(async (entry) => {
+            await strapi.entityService.create('plugin::strapi-react-icons-plugin.iconlibrary', {
+              data: entry,
+            });
+          })
+        );
+      }
       await pluginStore.set({ key: 'hasCreated', value: true });
     } catch (e) {
-      strapi.log.error(`Failed to seed default data in bootstrap: ${e}`);
+      strapi.log.error(`Bootstrap failed: ${e}`);
     }
   }
 };
