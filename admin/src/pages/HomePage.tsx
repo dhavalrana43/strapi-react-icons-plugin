@@ -1,3 +1,4 @@
+// src/plugins/strapi-react-icons-plugin/admin/src/pages/HomePage.tsx
 import { useEffect, useState, useMemo } from 'react';
 import { useFetchClient } from '@strapi/strapi/admin';
 import {
@@ -71,9 +72,18 @@ const HomePage = () => {
   const importDefaultIconLibraries = async () => {
     try {
       setImportError(null);
-      await post('/react-icons/iconlibrary/post');
-      await getIconLibraries();
-      setIsDefaultImported(true);
+      const response = await post('/react-icons/iconlibrary/post');
+      if (response) {
+        await getIconLibraries();
+        setIsDefaultImported(true);
+      } else {
+        setImportError(
+          formatMessage({
+            id: getTranslation('home.import_error'),
+            defaultMessage: 'Failed to import default data',
+          })
+        );
+      }
     } catch (e: any) {
       console.error('error', e);
       setImportError(
@@ -120,18 +130,24 @@ const HomePage = () => {
     <Main>
       {/* Header Section */}
       <Box padding={6} marginTop={2}>
-        <Box marginBottom={4}>
+        <Flex gap={2} alignItems={'flex-end'} marginBottom={4}>
           <Typography variant="alpha">
-            {formatMessage({ id: getTranslation('plugin.name') })}
+            {formatMessage({ id: getTranslation('plugin.name'), defaultMessage: 'React Icons' })}
           </Typography>
           <Typography variant="epsilon" textColor="neutral600">
-            {formatMessage({ id: getTranslation('home.subtitle') })}
+            {formatMessage({
+              id: getTranslation('home.subtitle'),
+              defaultMessage: 'Manage React Icon Libraries',
+            })}
           </Typography>
-        </Box>
+        </Flex>
         {!isDefaultImported && (
           <Box marginBottom={4}>
             <Button onClick={importDefaultIconLibraries}>
-              {formatMessage({ id: getTranslation('home.import_default') })}
+              {formatMessage({
+                id: getTranslation('home.import_default'),
+                defaultMessage: 'Import Default Libraries',
+              })}
             </Button>
           </Box>
         )}
@@ -146,7 +162,10 @@ const HomePage = () => {
             variant="secondary"
             startIcon={<Trash />}
           >
-            {formatMessage({ id: getTranslation('home.disable_all') })}
+            {formatMessage({
+              id: getTranslation('home.disable_all'),
+              defaultMessage: 'Disable All',
+            })}
           </Button>
           <Button
             onClick={() => iconLibraries.forEach((lib) => deleteIconLibrary(lib.id))}
@@ -154,7 +173,7 @@ const HomePage = () => {
             variant="danger"
             startIcon={<Trash />}
           >
-            {formatMessage({ id: getTranslation('home.delete_all') })}
+            {formatMessage({ id: getTranslation('home.delete_all'), defaultMessage: 'Delete All' })}
           </Button>
         </Flex>
       </Box>
@@ -176,27 +195,39 @@ const HomePage = () => {
               <Table.Row>
                 <Table.HeaderCell>
                   <Typography variant="sigma">
-                    {formatMessage({ id: getTranslation('home.enabled') })}
+                    {formatMessage({
+                      id: getTranslation('home.enabled'),
+                      defaultMessage: 'Enabled',
+                    })}
                   </Typography>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <Typography variant="sigma">
-                    {formatMessage({ id: getTranslation('home.abbreviation') })}
+                    {formatMessage({
+                      id: getTranslation('home.abbreviation'),
+                      defaultMessage: 'Abbreviation',
+                    })}
                   </Typography>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <Typography variant="sigma">
-                    {formatMessage({ id: getTranslation('home.name') })}
+                    {formatMessage({ id: getTranslation('home.name'), defaultMessage: 'Name' })}
                   </Typography>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <Typography variant="sigma">
-                    {formatMessage({ id: getTranslation('home.icon_count') })}
+                    {formatMessage({
+                      id: getTranslation('home.icon_count'),
+                      defaultMessage: 'Icon Count',
+                    })}
                   </Typography>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <VisuallyHidden>
-                    {formatMessage({ id: getTranslation('home.actions') })}
+                    {formatMessage({
+                      id: getTranslation('home.actions'),
+                      defaultMessage: 'Actions',
+                    })}
                   </VisuallyHidden>
                 </Table.HeaderCell>
               </Table.Row>
@@ -207,7 +238,10 @@ const HomePage = () => {
                   <Table.Cell>
                     <Checkbox
                       aria-label={formatMessage(
-                        { id: getTranslation('home.toggle_library') },
+                        {
+                          id: getTranslation('home.toggle_library'),
+                          defaultMessage: 'Toggle Library: {name}',
+                        },
                         { name: iconLibrary.name }
                       )}
                       checked={iconLibrary.isEnabled}
@@ -228,7 +262,10 @@ const HomePage = () => {
                       onClick={() => deleteIconLibrary(iconLibrary.id)}
                       icon={<Trash />}
                       aria-label={formatMessage(
-                        { id: getTranslation('home.delete_library') },
+                        {
+                          id: getTranslation('home.delete_library'),
+                          defaultMessage: 'Delete Library: {name}',
+                        },
                         { name: iconLibrary.name }
                       )}
                     />
@@ -240,12 +277,18 @@ const HomePage = () => {
         ) : (
           <Box padding={4}>
             <Typography variant="omega" textColor="neutral600">
-              {formatMessage({ id: getTranslation('home.no_libraries') })}
+              {formatMessage({
+                id: getTranslation('home.no_libraries'),
+                defaultMessage: 'No Icon Libraries Available',
+              })}
             </Typography>
             {!isDefaultImported && (
               <Box marginTop={2}>
                 <Button onClick={importDefaultIconLibraries}>
-                  {formatMessage({ id: getTranslation('home.import_default') })}
+                  {formatMessage({
+                    id: getTranslation('home.import_default'),
+                    defaultMessage: 'Import Default Libraries',
+                  })}
                 </Button>
               </Box>
             )}

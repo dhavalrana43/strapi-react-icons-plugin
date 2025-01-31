@@ -6,5 +6,20 @@
   "react-icons.iconSelector.noIconsAvailable": "No icons available in this library.",
   "react-icons.iconSelector.noIconLibrariesAvailable": "No icon libraries available. Please import them on the plugin page.",
   "react-icons.iconSelector.allIconLibraries": "All icon libraries",
-  "react-icons.iconSelector.search": "Search icons..."
+  "react-icons.iconSelector.search": "Search icons...",
+  "plugin.name": "React Icons",
+  "home.subtitle": "Manage React Icon Libraries",
+  "home.import_default": "Import Default Libraries",
+  "home.disable_all": "Disable All",
+  "home.delete_all": "Delete All",
+  "home.enabled": "Enabled",
+  "home.abbreviation": "Abbreviation",
+  "home.name": "Name",
+  "home.icon_count": "Icon Count",
+  "home.actions": "Actions",
+  "home.toggle_library": "Toggle Library: {name}",
+  "home.delete_library": "Delete Library: {name}",
+  "home.loading_libraries": "Loading icon libraries...",
+  "home.no_libraries": "No Icon Libraries Available",
+  "home.import_error": "Failed to import default data"
 }

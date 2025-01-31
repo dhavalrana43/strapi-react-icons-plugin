@@ -1,3 +1,4 @@
+// src/plugins/strapi-react-icons-plugin/server/src/services/iconLibraryService.ts
 import type { Core } from '@strapi/strapi';
 
 const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
@@ -17,6 +18,10 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
       if (Array.isArray(data)) {
         const results = [];
         for (const entry of data) {
+          if (!entry || !entry.abbreviation) {
+            strapi.log.error(`Invalid entry format`);
+            throw new Error(`Invalid entry format`);
+          }
           const existing = await strapi.entityService.findMany(
             'plugin::strapi-react-icons-plugin.iconlibrary',
             { filters: { abbreviation: entry.abbreviation } }
@@ -31,7 +36,10 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
         }
         return results;
       }
-
+      if (!data || !data.abbreviation) {
+        strapi.log.error(`Invalid entry format`);
+        throw new Error('Invalid entry format');
+      }
       const existing = await strapi.entityService.findMany(
         'plugin::strapi-react-icons-plugin.iconlibrary',
         { filters: { abbreviation: data.abbreviation } }
@@ -40,7 +48,6 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
       if (existing.length > 0) {
         throw new Error('Library already exists');
       }
-
       return await strapi.entityService.create('plugin::strapi-react-icons-plugin.iconlibrary', {
         data,
       });
@@ -49,6 +56,7 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
       throw e;
     }
   },
+
   async update(id: string, data: any) {
     try {
       return await strapi.entityService.update(
