@@ -1,5 +1,4 @@
-const schema = require('./schema');
-
+import schema from './schema.json';
 export default {
   schema,
 };

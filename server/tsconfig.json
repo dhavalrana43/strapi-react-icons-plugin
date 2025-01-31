@@ -1,8 +1,11 @@
 {
   "extends": "@strapi/typescript-utils/tsconfigs/server",
-  "include": ["./src", "server/**/*.json"],
+  "include": [
+    "./src", // Include all source files
+    "server/**/*.json" // Include JSON files in the server folder
+  ],
   "compilerOptions": {
-    "rootDir": "../",
-    "baseUrl": "."
+    "rootDir": "../", // Set root directory to the plugin folder
+    "baseUrl": "." // Base URL for module resolution
   }
 }

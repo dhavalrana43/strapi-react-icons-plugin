@@ -1,10 +1,14 @@
 {
   "extends": "@strapi/typescript-utils/tsconfigs/admin",
-  "include": ["./src", "./custom.d.ts"],
+  "include": [
+    "./src", // Include all source files
+    "./custom.d.ts" // Include custom type definitions
+  ],
   "compilerOptions": {
-    "rootDir": "../",
-    "baseUrl": ".",
-    "target": "ESNext",
-    "strict": true
+    "rootDir": "../", // Set root directory to the plugin folder
+    "baseUrl": ".", // Base URL for module resolution
+    "target": "ESNext", // Target modern JavaScript
+    "strict": true, // Enable strict type-checking
+    "resolveJsonModule": true // Allow importing JSON files
   }
 }
