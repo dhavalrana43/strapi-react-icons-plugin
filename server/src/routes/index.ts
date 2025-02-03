@@ -7,10 +7,9 @@ export default [
       policies: [],
     },
   },
-
   {
     method: 'GET',
-    path: '/iconlibrary/find',
+    path: '/strapi-react-icons-plugin/iconlibrary/find',
     handler: 'iconLibraryController.find',
     config: {
       policies: [],
@@ -18,7 +17,7 @@ export default [
   },
   {
     method: 'POST',
-    path: '/iconlibrary/post',
+    path: '/strapi-react-icons-plugin/iconlibrary/post',
     handler: 'iconLibraryController.create',
     config: {
       policies: [],
@@ -26,7 +25,7 @@ export default [
   },
   {
     method: 'PUT',
-    path: '/iconlibrary/update/:id',
+    path: '/strapi-react-icons-plugin/iconlibrary/update/:id',
     handler: 'iconLibraryController.update',
     config: {
       policies: [],
@@ -34,7 +33,7 @@ export default [
   },
   {
     method: 'DELETE',
-    path: '/iconlibrary/delete/:id',
+    path: '/strapi-react-icons-plugin/iconlibrary/delete/:id',
     handler: 'iconLibraryController.delete',
     config: {
       policies: [],

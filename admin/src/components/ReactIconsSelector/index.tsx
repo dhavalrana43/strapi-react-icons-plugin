@@ -58,7 +58,7 @@ const ReactIconsSelector: React.FC<IReactIconsSelector> = ({
   useEffect(() => {
     const getIconLibraries = async () => {
       try {
-        const response = await get('/react-icons/iconlibrary/find');
+        const response = await get('/strapi-react-icons-plugin/iconlibrary/find');
         setIconLibraries(
           response.data.filter((iconLibrary: IIconLibrary) => iconLibrary.isEnabled)
         );

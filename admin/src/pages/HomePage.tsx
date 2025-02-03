@@ -38,7 +38,7 @@ const HomePage = () => {
   const getIconLibraries = async () => {
     try {
       setLoadingData(true);
-      const response = await get('/react-icons/iconlibrary/find');
+      const response = await get('/strapi-react-icons-plugin/iconlibrary/find');
       setIconLibraries([...response.data]);
       setLoadingData(false);
     } catch (e) {
@@ -49,7 +49,7 @@ const HomePage = () => {
 
   const updateIconLibrary = async (id: string, isEnabled: boolean) => {
     try {
-      await put(`/react-icons/iconlibrary/update/${id}`, {
+      await put(`/strapi-react-icons-plugin/iconlibrary/update/${id}`, {
         data: { isEnabled: isEnabled },
       });
       setIconLibraries((current) =>
@@ -62,7 +62,7 @@ const HomePage = () => {
 
   const deleteIconLibrary = async (id: string) => {
     try {
-      await del(`/react-icons/iconlibrary/delete/${id}`);
+      await del(`/strapi-react-icons-plugin/iconlibrary/delete/${id}`);
       setIconLibraries((current) => current.filter((lib) => lib.id !== id));
     } catch (e) {
       console.error(`Failed to delete icon library ${id}`, e);
@@ -72,10 +72,11 @@ const HomePage = () => {
   const importDefaultIconLibraries = async () => {
     try {
       setImportError(null);
-      const response = await post('/react-icons/iconlibrary/post');
+      const response = await post('/strapi-react-icons-plugin/iconlibrary/post');
       if (response) {
         await getIconLibraries();
         setIsDefaultImported(true);
+        console.log('Response:', response);
       } else {
         setImportError(
           formatMessage({
@@ -104,10 +105,10 @@ const HomePage = () => {
   useEffect(() => {
     const checkDefaultData = async () => {
       try {
-        const response = await get('/react-icons/iconlibrary/find');
+        const response = await get('/strapi-react-icons-plugin/iconlibrary/find');
         if (response.data && response.data.length > 0) setIsDefaultImported(true);
       } catch (e) {
-        console.log('Failed to check default data', e);
+        console.error('Failed to check default data', e);
       }
     };
     checkDefaultData();

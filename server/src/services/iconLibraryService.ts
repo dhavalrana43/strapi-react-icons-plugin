@@ -34,12 +34,15 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
             );
           }
         }
+        console.log('Incoming data:', data);
         return results;
       }
+
       if (!data || !data.abbreviation) {
         strapi.log.error(`Invalid entry format`);
         throw new Error('Invalid entry format');
       }
+
       const existing = await strapi.entityService.findMany(
         'plugin::strapi-react-icons-plugin.iconlibrary',
         { filters: { abbreviation: data.abbreviation } }
@@ -48,6 +51,7 @@ const iconLibraryService = ({ strapi }: { strapi: Core.Strapi }) => ({
       if (existing.length > 0) {
         throw new Error('Library already exists');
       }
+
       return await strapi.entityService.create('plugin::strapi-react-icons-plugin.iconlibrary', {
         data,
       });
